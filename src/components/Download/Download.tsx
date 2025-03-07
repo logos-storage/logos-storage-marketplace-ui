@@ -1,6 +1,6 @@
 import { Button, Input } from "@codex-storage/marketplace-ui-components";
 import "./Download.css";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { CodexSdk } from "../../sdk/codex";
 import { attributes } from "../../utils/attributes";
 
