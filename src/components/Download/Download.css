@@ -1,4 +1,8 @@
 .download {
+  &[aria-invalid] {
+    --codex-download-color: var(--codex-color-error);
+  }
+
   .input {
     flex: 1;
 
@@ -9,5 +13,38 @@
 
   .button {
     width: 105px;
+  }
+
+  progress {
+    flex-grow: 1;
+    background-color: var(--codex-upload-file-progress-color, rgb(38 38 38));
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    border-radius: var(--codex-upload-file-border-radius);
+    height: 0.5rem;
+    width: 100%;
+    border: none;
+
+    &[value]::-webkit-progress-bar {
+      background-color: var(--codex-upload-file-progress-color, rgb(38 38 38));
+      border-radius: 50px;
+    }
+
+    &[value]::-webkit-progress-value {
+      background-color: var(--codex-download-color, var(--codex-color-primary));
+      border-radius: 50px;
+    }
+
+    &[value]::-moz-progress-bar {
+      border-radius: 50px;
+      background-color: var(--codex-download-color, var(--codex-color-primary));
+    }
+  }
+
+  p {
+    color: var(--codex-download-color, var(--codex-color-primary));
+    margin-top: 6px;
   }
 }
