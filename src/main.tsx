@@ -135,7 +135,7 @@ if (rootElement) {
               return;
             }
 
-            return CodexSdk.updateURL(url);
+            return CodexSdk.updateURL(url, {});
           }
         }
       }

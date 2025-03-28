@@ -77,6 +77,7 @@ test("does not display undefined when delete the url value", async ({
   }
 
   await expect(page.locator("#url")).toHaveValue("");
+  await page.locator("#url").blur();
   await expect(page.locator("#url")).toHaveAttribute("aria-invalid");
   await expect(page.locator(".refresh svg")).toHaveAttribute(
     "color",

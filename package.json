@@ -26,8 +26,8 @@
     "React"
   ],
   "dependencies": {
-    "@codex-storage/marketplace-ui-components": "^0.0.51",
-    "@codex-storage/sdk-js": "^0.0.23",
+    "@codex-storage/marketplace-ui-components": "./codex-storage-marketplace-ui-components-0.0.51.tgz",
+    "@codex-storage/sdk-js": "./codex-storage-sdk-js-0.1.1.tgz",
     "@sentry/browser": "^8.32.0",
     "@sentry/react": "^8.31.0",
     "@tanstack/react-query": "^5.51.15",

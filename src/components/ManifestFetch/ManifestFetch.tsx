@@ -17,7 +17,6 @@ export function ManifestFetch() {
           if (s.error === false) {
             setCid("");
             queryClient.invalidateQueries({ queryKey: ["cids"] });
-            console.info("Done");
           }
           return Promises.rejectOnError(s);
         });

@@ -31,6 +31,7 @@ export function HealthChecks({ online, onStepValid }: Props) {
     HealthCheckUtils.removePort(CodexSdk.url())
   );
   const [port, setPort] = useState(HealthCheckUtils.getPort(CodexSdk.url()));
+  const [auth, setAuth] = useState("");
   const queryClient = useQueryClient();
 
   useEffect(
@@ -46,23 +47,31 @@ export function HealthChecks({ online, onStepValid }: Props) {
     [persistence.refetch, onStepValid, portForwarding.refetch, codex.isSuccess]
   );
 
-  const onAddressChange = (e: React.FormEvent<HTMLInputElement>) => {
+  const onAddressBlur = (e: React.FormEvent<HTMLInputElement>) => {
     const element = e.currentTarget;
     const value = e.currentTarget.value;
 
     setIsAddressInvalid(!element.checkValidity());
 
-    setAddress(value);
+    const { auth, url } = HealthCheckUtils.extractBasicAuth(value);
 
-    if (HealthCheckUtils.containsPort(value)) {
-      const address = HealthCheckUtils.removePort(value);
+    setAddress(url);
+
+    if (HealthCheckUtils.containsPort(url)) {
+      const address = HealthCheckUtils.removePort(url);
       setAddress(address);
 
-      const p = HealthCheckUtils.getPort(value);
+      const p = HealthCheckUtils.getPort(url);
       setPort(p);
     } else {
-      setAddress(value);
+      setAddress(url);
     }
+
+    setAuth(auth || "");
+  };
+
+  const onChange = (e: React.FormEvent<HTMLInputElement>) => {
+    setAddress(e.currentTarget.value);
   };
 
   const onPortChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -70,19 +79,25 @@ export function HealthChecks({ online, onStepValid }: Props) {
     const value = element.value;
 
     setIsPortInvalid(!element.checkValidity());
-    setPort(parseInt(value, 10));
+    setPort(value);
   };
 
   const onSave = () => {
-    const url = address + ":" + port;
+    let url = address;
+
+    if (port) {
+      url += ":" + port;
+    }
 
     if (HealthCheckUtils.isUrlInvalid(url)) {
       return;
     }
 
-    CodexSdk.updateURL(url)
+    CodexSdk.updateURL(url, { auth: { basic: auth } })
       .then(() => queryClient.invalidateQueries())
       .then(() => codex.refetch());
+
+    setAuth("");
   };
 
   return (
@@ -98,9 +113,11 @@ export function HealthChecks({ online, onStepValid }: Props) {
             type="url"
             label="Address"
             required
+            mode={"manual"}
             isInvalid={isAddressInvalid}
-            onChange={onAddressChange}
+            onBlur={onAddressBlur}
             value={address}
+            onChange={onChange}
             placeholder="127.0.0.1"></Input>
           {isAddressInvalid ? (
             <ErrorCircleIcon width={16} />
