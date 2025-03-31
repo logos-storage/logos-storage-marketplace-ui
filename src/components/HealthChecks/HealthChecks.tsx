@@ -6,13 +6,14 @@ import { usePortForwarding } from "../../hooks/usePortForwarding";
 import { Input, Spinner } from "@codex-storage/marketplace-ui-components";
 import { classnames } from "../../utils/classnames";
 import "./HealthChecks.css";
-import { CodexSdk } from "../../sdk/codex";
+import { CodexAuthUpdateOptions, CodexSdk } from "../../sdk/codex";
 import { HealthCheckUtils } from "./health-check.utils";
 import SuccessCircleIcon from "../../assets/icons/success-circle.svg?react";
 import ErrorCircleIcon from "../../assets/icons/error-circle.svg?react";
 import DeviceIcon from "../../assets/icons/device.svg?react";
 import RefreshIcon from "../../assets/icons/refresh.svg?react";
 import WarningIcon from "../../assets/icons/warning-circle.svg?react";
+import { WebStorage } from "../../utils/web-storage";
 
 type Props = {
   online: boolean;
@@ -31,8 +32,22 @@ export function HealthChecks({ online, onStepValid }: Props) {
     HealthCheckUtils.removePort(CodexSdk.url())
   );
   const [port, setPort] = useState(HealthCheckUtils.getPort(CodexSdk.url()));
-  const [auth, setAuth] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isBasicAuth, setIsBasicAuth] = useState(false);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    Promise.all([
+      WebStorage.get<string>("codex-auth-username"),
+      WebStorage.get<string>("codex-auth-password"),
+      WebStorage.get<boolean>("codex-auth-enabled"),
+    ]).then(([username = "", password = "", enabled = false]) => {
+      setUsername(username);
+      setPassword(password);
+      setIsBasicAuth(enabled);
+    });
+  }, []);
 
   useEffect(
     () => {
@@ -49,25 +64,24 @@ export function HealthChecks({ online, onStepValid }: Props) {
 
   const onAddressBlur = (e: React.FormEvent<HTMLInputElement>) => {
     const element = e.currentTarget;
-    const value = e.currentTarget.value;
+    let value = e.currentTarget.value;
+
+    if (value.endsWith("/")) {
+      value = value.slice(0, -1);
+    }
 
     setIsAddressInvalid(!element.checkValidity());
 
-    const { auth, url } = HealthCheckUtils.extractBasicAuth(value);
-
-    setAddress(url);
-
-    if (HealthCheckUtils.containsPort(url)) {
-      const address = HealthCheckUtils.removePort(url);
+    if (HealthCheckUtils.containsPort(value)) {
+      const address = HealthCheckUtils.getAddress(value);
       setAddress(address);
 
-      const p = HealthCheckUtils.getPort(url);
+      const p = HealthCheckUtils.getPort(value);
+
       setPort(p);
     } else {
-      setAddress(url);
+      setAddress(value);
     }
-
-    setAuth(auth || "");
   };
 
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -89,16 +103,40 @@ export function HealthChecks({ online, onStepValid }: Props) {
       url += ":" + port;
     }
 
-    if (HealthCheckUtils.isUrlInvalid(url)) {
+    if (isAddressInvalid || isPortInvalid) {
       return;
     }
 
-    CodexSdk.updateURL(url, { auth: { basic: auth } })
+    let options: CodexAuthUpdateOptions = {};
+
+    if (isBasicAuth) {
+      options.auth = {
+        username,
+        password,
+      };
+    }
+
+    CodexSdk.updateURL(url, options)
       .then(() => queryClient.invalidateQueries())
       .then(() => codex.refetch());
-
-    setAuth("");
   };
+
+  const onUsernameChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const element = e.currentTarget;
+    setUsername(element.value);
+  };
+
+  const onPasswordChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const element = e.currentTarget;
+    setPassword(element.value);
+  };
+
+  const onBasicAuthChange = () => {
+    setIsBasicAuth(!isBasicAuth);
+  };
+
+  const isUsernameInvalid = isBasicAuth && !username;
+  const isPasswordInvalid = isBasicAuth && !password;
 
   return (
     <div className="health-checks">
@@ -144,6 +182,56 @@ export function HealthChecks({ online, onStepValid }: Props) {
             onClick={onSave}></RefreshIcon>
         </div>
       </div>
+
+      <div className="basic-auth-checkbox">
+        <input
+          id="basic-auth"
+          type="checkbox"
+          checked={isBasicAuth}
+          onChange={onBasicAuthChange}></input>
+        <label htmlFor="basic-auth">Enable basic authentication</label>
+      </div>
+
+      {isBasicAuth && (
+        <form className="basic-auth-container">
+          <div>
+            <Input
+              id="username"
+              type="text"
+              mode="manual"
+              label="Username"
+              required={isBasicAuth}
+              onChange={onUsernameChange}
+              autoComplete="username"
+              value={username}
+              isInvalid={isUsernameInvalid}
+              placeholder=""></Input>
+            {isUsernameInvalid ? (
+              <ErrorCircleIcon width={16} />
+            ) : (
+              <SuccessCircleIcon width={20} />
+            )}
+          </div>
+
+          <div>
+            <Input
+              id="password"
+              type="password"
+              label="Password"
+              mode="manual"
+              isInvalid={isPasswordInvalid}
+              onChange={onPasswordChange}
+              value={password}
+              autoComplete="current-password"
+              placeholder=""></Input>
+            {isPasswordInvalid ? (
+              <ErrorCircleIcon width={16} />
+            ) : (
+              <SuccessCircleIcon width={20} />
+            )}
+          </div>
+        </form>
+      )}
 
       <p>
         <li>Ensure that port forwarding is enabled for your settings.</li>

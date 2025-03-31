@@ -5,6 +5,7 @@
     gap: 16px;
     flex-direction: column;
     align-items: flex-start;
+    margin-bottom: 16px;
 
     @media (min-width: 1000px) {
       & {
@@ -21,13 +22,6 @@
           width: 100%;
         }
       }
-    }
-
-    svg {
-      position: absolute;
-      top: 68px;
-      bottom: 0;
-      right: 18px;
     }
 
     .refresh {
@@ -82,6 +76,35 @@
     }
   }
 
+  .basic-auth-container {
+    display: flex;
+    gap: 16px;
+
+    > div {
+      position: relative;
+    }
+  }
+
+  .basic-auth-checkbox {
+    display: flex;
+    align-items: center;
+
+    label {
+      margin-top: 0;
+      position: relative;
+      top: -2px;
+    }
+  }
+
+  .input {
+    & + svg {
+      position: absolute;
+      top: 68px;
+      bottom: 0;
+      right: 18px;
+    }
+  }
+
   p {
     font-family: Azeret Mono;
     font-size: 12px;
@@ -120,5 +143,41 @@
         justify-content: center;
       }
     }
+  }
+
+  input[type="checkbox"] {
+    appearance: none;
+    background-color: var(--codex-input-background-color);
+    cursor: pointer;
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgba(150, 150, 150, 0.2);
+    border-radius: 0.15em;
+    transform: translateY(-0.075em);
+    display: inline-grid;
+    place-content: center;
+    border-color: 0.5px solid
+      var(--codex-input-border-color, rgba(150, 150, 150, 0.2));
+    margin-right: 8px;
+    background-color: var(
+      --codex-input-background-color,
+      rgba(20, 20, 20, 0.6)
+    );
+  }
+
+  input[type="checkbox"]::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--codex-color-primary);
+  }
+
+  input[type="checkbox"]:checked::before {
+    transform: scale(1);
   }
 }

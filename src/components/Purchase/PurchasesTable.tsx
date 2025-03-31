@@ -87,29 +87,31 @@ export function PurchasesTable() {
 
   const sorted = sortFn ? [...data].sort(sortFn) : data;
 
-  const rows = sorted.map((p, index) => {
-    const r = p.request;
-    const ask = p.request.ask;
-    const duration = parseInt(ask.duration, 10);
-    const pf = parseInt(ask.proofProbability, 10);
-    return (
-      <Row
-        cells={[
-          <FileCell
-            requestId={r.id}
-            purchaseCid={r.content.cid}
-            index={index}
-            data={content}
-          />,
-          <TruncateCell value={r.id} />,
-          <Cell>{Times.pretty(duration)}</Cell>,
-          <Cell>{ask.slots.toString()}</Cell>,
-          <Cell>{p.request.ask.pricePerBytePerSecond + " CDX"}</Cell>,
-          <Cell>{pf.toString()}</Cell>,
-          <CustomStateCellRender state={p.state} message={p.error} />,
-        ]}></Row>
-    );
-  });
+  const rows = sorted
+    .filter((p) => !!p.request)
+    .map((p, index) => {
+      const r = p.request!;
+      const ask = r.ask;
+      const duration = ask.duration;
+      const pf = ask.proofProbability;
+      return (
+        <Row
+          cells={[
+            <FileCell
+              requestId={r.id}
+              purchaseCid={r.content.cid}
+              index={index}
+              data={content}
+            />,
+            <TruncateCell value={r.id} />,
+            <Cell>{Times.pretty(duration)}</Cell>,
+            <Cell>{ask.slots.toString()}</Cell>,
+            <Cell>{r.ask.pricePerBytePerSecond + " CDX"}</Cell>,
+            <Cell>{pf.toString()}</Cell>,
+            <CustomStateCellRender state={p.state} message={p.error || ""} />,
+          ]}></Row>
+      );
+    });
 
   if (isPending) {
     return (

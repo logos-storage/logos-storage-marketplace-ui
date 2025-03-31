@@ -50,12 +50,15 @@ test("update the URL with basic auth save the credentials", async ({
   await page.goto("/dashboard");
   await page.locator("a").filter({ hasText: "Settings" }).click();
   await page.getByLabel("Address").click();
-  await page.getByLabel("Address").fill("http://hello:world@localhost:8080");
+  await page.getByLabel("Address").fill("http://localhost:8080");
   await page.getByLabel("Address").blur();
   await expect(page.getByLabel("Address")).not.toHaveAttribute("aria-invalid");
   await expect(page.locator(".refresh svg")).not.toHaveAttribute(
     "aria-disabled"
   );
+  await page.getByLabel("Enable basic authentication").check();
+  await page.getByLabel("Username").fill("hello");
+  await page.getByLabel("Password").fill("world");
 
   let failedRequestAuthorization;
   page.on("requestfailed", async (request) => {
@@ -68,9 +71,16 @@ test("update the URL with basic auth save the credentials", async ({
 
   expect(failedRequestAuthorization).toBe("Basic " + btoa("hello:world"));
 
-  await page.getByLabel("Address").click();
-  await page.getByLabel("Address").fill("http://localhost:8080");
-  await page.getByLabel("Address").blur();
+  await page.reload();
+
+  await expect(page.getByLabel("Username")).toHaveValue("hello");
+  await expect(page.getByLabel("Password")).toHaveValue("world");
+  await expect(page.getByLabel("Enable basic authentication")).toBeChecked();
+
+  await page.getByLabel("Enable basic authentication").uncheck();
+  await expect(
+    page.getByLabel("Enable basic authentication")
+  ).not.toBeChecked();
 
   let successRequestAuthorization: string | null = "failed";
   page.on("request", async (request) => {
@@ -84,4 +94,10 @@ test("update the URL with basic auth save the credentials", async ({
   await page.waitForRequest("http://localhost:8080/api/codex/v1/spr");
 
   expect(successRequestAuthorization).toBeNull();
+
+  await page.reload();
+
+  await expect(
+    page.getByLabel("Enable basic authentication")
+  ).not.toHaveAttribute("checked");
 });

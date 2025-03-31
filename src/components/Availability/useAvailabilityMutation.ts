@@ -8,7 +8,7 @@ import {
   StepperState,
 } from "@codex-storage/marketplace-ui-components";
 import { CodexSdk } from "../../sdk/codex";
-import { CodexAvailabilityCreateResponse } from "@codex-storage/sdk-js";
+import { CodexAvailability } from "@codex-storage/sdk-js";
 import { Times } from "../../utils/times";
 import { AvailabilityUtils } from "./availability.utils";
 
@@ -31,7 +31,7 @@ export function useAvailabilityMutation(
     }: AvailabilityState) => {
       const fn: (
         input: Omit<AvailabilityState, "totalSizeUnit" | "durationUnit">
-      ) => Promise<"" | CodexAvailabilityCreateResponse> = input.id
+      ) => Promise<"" | CodexAvailability> = input.id
         ? (input) => {
             return CodexSdk.marketplace()
               .updateAvailability({

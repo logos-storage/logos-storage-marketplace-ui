@@ -13,10 +13,6 @@ describe("health check", () => {
     assert.deepEqual(HealthCheckUtils.getPort("http://localhost:8080"), "8080");
   });
 
-  it("get the default port when the url does not contain the port", async () => {
-    assert.deepEqual(HealthCheckUtils.getPort("http://localhost"), "");
-  });
-
   it("returns true when the url contains a port", async () => {
     assert.deepEqual(
       HealthCheckUtils.containsPort("http://localhost:8080"),
@@ -28,10 +24,21 @@ describe("health check", () => {
     assert.deepEqual(HealthCheckUtils.containsPort("http://localhost"), false);
   });
 
-  it("extracts the basic authentication", async () => {
+  it("get the default port when the url does not contain the port", async () => {
+    assert.deepEqual(HealthCheckUtils.getPort("http://localhost"), "");
+  });
+
+  it("removes the basic auth from the url", async () => {
     assert.deepEqual(
-      HealthCheckUtils.extractBasicAuth("http://hello:world@localhost:8080"),
-      { auth: "hello:world", url: "http://localhost:8080" }
+      HealthCheckUtils.getAddress("http://hello:world@localhost:8080"),
+      "http://hello:world@localhost"
+    );
+  });
+
+  it("takes only one protocol when multiples are present", async () => {
+    assert.deepEqual(
+      HealthCheckUtils.getAddress("http://http://localhost:8080"),
+      "http://http://localhost"
     );
   });
 

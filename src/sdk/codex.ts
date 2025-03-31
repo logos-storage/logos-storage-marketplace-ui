@@ -4,9 +4,10 @@ import { WebStorage } from "../utils/web-storage";
 let client: Codex = new Codex(import.meta.env.VITE_CODEX_API_URL);
 let url: string = import.meta.env.VITE_CODEX_API_URL;
 
-type CodexSdkUpdateOptions = {
+export type CodexAuthUpdateOptions = {
   auth?: {
-    basic?: string;
+    username: string;
+    password: string;
   };
 };
 
@@ -16,28 +17,50 @@ export const CodexSdk = {
   },
 
   async load() {
-    const [url = import.meta.env.VITE_CODEX_API_URL, basicAuthSecret] =
-      await Promise.all([
-        WebStorage.get<string>("codex-node-url"),
-        WebStorage.get<string>("codex-auth-basic"),
-      ]);
-
-    client = new Codex(url, { auth: { basic: basicAuthSecret } });
-  },
-
-  updateURL(u: string, options: CodexSdkUpdateOptions) {
-    let basicAuthSecret: string = "";
-
-    if (options.auth?.basic) {
-      basicAuthSecret = btoa(options.auth?.basic);
-    }
+    const [
+      u = import.meta.env.VITE_CODEX_API_URL,
+      username,
+      password,
+      enabled,
+    ] = await Promise.all([
+      WebStorage.get<string>("codex-node-url"),
+      WebStorage.get<string>("codex-auth-username"),
+      WebStorage.get<string>("codex-auth-password"),
+      WebStorage.get<boolean>("codex-auth-enabled"),
+    ]);
 
     url = u;
+
+    client = new Codex(u, {
+      auth: { basic: enabled ? btoa(`${username}:${password}`) : "" },
+    });
+  },
+
+  updateURL(u: string, options: CodexAuthUpdateOptions) {
+    let basicAuthSecret: string = "";
+
+    url = u;
+
+    const promises = [WebStorage.set("codex-node-url", url)];
+    console.info(url);
+    if (options.auth) {
+      const { username, password } = options.auth;
+      basicAuthSecret = btoa(`${username}:${password}`);
+      promises.push(WebStorage.set("codex-auth-enabled", true));
+    } else {
+      promises.push(WebStorage.set("codex-auth-enabled", false));
+    }
+
     client = new Codex(url, { auth: { basic: basicAuthSecret } });
 
-    return WebStorage.set("codex-auth-basic", basicAuthSecret).then(() =>
-      WebStorage.set("codex-node-url", url)
-    );
+    if (options.auth) {
+      promises.push(
+        WebStorage.set("codex-auth-username", options.auth.username),
+        WebStorage.set("codex-auth-password", options.auth.password)
+      );
+    }
+
+    return Promise.all(promises);
   },
 
   debug() {

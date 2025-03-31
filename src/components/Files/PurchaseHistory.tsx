@@ -35,19 +35,21 @@ export function PurchaseHistory({ purchases }: Props) {
 
   const sorted = sortFn ? [...purchases].sort(sortFn) : purchases;
 
-  const rows = sorted.map((p) => {
-    const duration = parseInt(p.request.ask.duration, 10);
+  const rows = sorted
+    .filter((p) => !!p.request)
+    .map((p) => {
+      const duration = p.request!.ask.duration;
 
-    return (
-      <Row
-        cells={[
-          <TruncateCell value={p.requestId} />,
-          <Cell>{Times.pretty(duration)}</Cell>,
-          <Cell>{p.request.expiry}</Cell>,
-          <CustomStateCellRender state={p.state} message={p.error} />,
-        ]}></Row>
-    );
-  });
+      return (
+        <Row
+          cells={[
+            <TruncateCell value={p.requestId} />,
+            <Cell>{Times.pretty(duration)}</Cell>,
+            <Cell>{p.request!.expiry}</Cell>,
+            <CustomStateCellRender state={p.state} message={p.error || ""} />,
+          ]}></Row>
+      );
+    });
 
   if (purchases.length > 0) {
     return (

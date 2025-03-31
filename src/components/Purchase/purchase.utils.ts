@@ -1,5 +1,5 @@
 import { TabSortState } from "@codex-storage/marketplace-ui-components";
-import { CodexPurchase, CodexStorageRequest } from "@codex-storage/sdk-js";
+import { CodexPurchase } from "@codex-storage/sdk-js";
 
 export const PurchaseUtils = {
   sortById: (state: TabSortState) => (a: CodexPurchase, b: CodexPurchase) => {
@@ -18,12 +18,12 @@ export const PurchaseUtils = {
   sortByDuration:
     (state: TabSortState) => (a: CodexPurchase, b: CodexPurchase) =>
       state === "desc"
-        ? Number(b.request.ask.duration) - Number(a.request.ask.duration)
-        : Number(a.request.ask.duration) - Number(b.request.ask.duration),
+        ? Number(b.request?.ask.duration) - Number(a.request?.ask.duration)
+        : Number(a.request?.ask.duration) - Number(b.request?.ask.duration),
   sortByReward:
     (state: TabSortState) => (a: CodexPurchase, b: CodexPurchase) => {
-      const aPrice = parseInt(a.request.ask.pricePerBytePerSecond, 10);
-      const bPrice = parseInt(b.request.ask.pricePerBytePerSecond, 10);
+      const aPrice = a.request?.ask.pricePerBytePerSecond || 0;
+      const bPrice = b.request?.ask.pricePerBytePerSecond || 0;
       return state === "desc" ? bPrice - aPrice : aPrice - bPrice;
     },
   sortByUploadedAt:
@@ -33,10 +33,4 @@ export const PurchaseUtils = {
         ? (table[b.requestId] || 0) - (table[a.requestId] || 0)
         : (table[a.requestId] || 0) - (table[b.requestId] || 0);
     },
-  calculatePrice(request: CodexStorageRequest) {
-    return (
-      parseInt(request.ask.slotSize, 10) *
-      parseInt(request.ask.pricePerBytePerSecond, 10)
-    );
-  },
 };
