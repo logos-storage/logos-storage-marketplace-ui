@@ -1,5 +1,5 @@
 import { TabSortState } from "@codex-storage/marketplace-ui-components";
-import { CodexDataItem } from "@codex-storage/sdk-js";
+import { CodexDataContent } from "@codex-storage/sdk-js";
 
 const archiveMimetypes = [
   "application/zip",
@@ -37,34 +37,37 @@ export const FilesUtils = {
 
     return "document";
   },
-  sortByName: (state: TabSortState) => (a: CodexDataItem, b: CodexDataItem) => {
-    const {
-      manifest: { filename: afilename },
-    } = a;
-    const {
-      manifest: { filename: bfilename },
-    } = b;
+  sortByName:
+    (state: TabSortState) => (a: CodexDataContent, b: CodexDataContent) => {
+      const {
+        manifest: { filename: afilename },
+      } = a;
+      const {
+        manifest: { filename: bfilename },
+      } = b;
 
-    return state === "desc"
-      ? (bfilename || "")
-          .toLocaleLowerCase()
-          .localeCompare((afilename || "").toLocaleLowerCase())
-      : (afilename || "")
-          .toLocaleLowerCase()
-          .localeCompare((bfilename || "").toLocaleLowerCase());
-  },
-  sortBySize: (state: TabSortState) => (a: CodexDataItem, b: CodexDataItem) =>
-    state === "desc"
-      ? b.manifest.datasetSize - a.manifest.datasetSize
-      : a.manifest.datasetSize - b.manifest.datasetSize,
-  sortByDate: (state: TabSortState) => (a: CodexDataItem, b: CodexDataItem) => {
-    const aUploadedAt = FilesUtils.getUploadedAt(a.cid);
-    const bUploadedAt = FilesUtils.getUploadedAt(b.cid);
+      return state === "desc"
+        ? (bfilename || "")
+            .toLocaleLowerCase()
+            .localeCompare((afilename || "").toLocaleLowerCase())
+        : (afilename || "")
+            .toLocaleLowerCase()
+            .localeCompare((bfilename || "").toLocaleLowerCase());
+    },
+  sortBySize:
+    (state: TabSortState) => (a: CodexDataContent, b: CodexDataContent) =>
+      state === "desc"
+        ? b.manifest.datasetSize - a.manifest.datasetSize
+        : a.manifest.datasetSize - b.manifest.datasetSize,
+  sortByDate:
+    (state: TabSortState) => (a: CodexDataContent, b: CodexDataContent) => {
+      const aUploadedAt = FilesUtils.getUploadedAt(a.cid);
+      const bUploadedAt = FilesUtils.getUploadedAt(b.cid);
 
-    return state === "desc"
-      ? new Date(bUploadedAt).getTime() - new Date(aUploadedAt).getTime()
-      : new Date(aUploadedAt).getTime() - new Date(bUploadedAt).getTime();
-  },
+      return state === "desc"
+        ? new Date(bUploadedAt).getTime() - new Date(aUploadedAt).getTime()
+        : new Date(aUploadedAt).getTime() - new Date(bUploadedAt).getTime();
+    },
 
   removeCidFromFolder(
     folders: [string, string[]][],
@@ -92,7 +95,7 @@ export const FilesUtils = {
       ? filters.filter((f) => f !== filter)
       : [...filters, filter],
   listInFolder(
-    files: CodexDataItem[],
+    files: CodexDataContent[],
     folders: [string, string[]][],
     index: number
   ) {
@@ -100,7 +103,7 @@ export const FilesUtils = {
       ? files
       : files.filter((file) => folders[index - 1][1].includes(file.cid));
   },
-  applyFilters(files: CodexDataItem[], filters: string[]) {
+  applyFilters(files: CodexDataContent[], filters: string[]) {
     return files.filter(
       (file) =>
         filters.length === 0 ||

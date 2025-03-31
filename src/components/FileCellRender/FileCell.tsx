@@ -6,7 +6,7 @@ import {
 } from "@codex-storage/marketplace-ui-components";
 import "./FileCell.css";
 import { WebStorage } from "../../utils/web-storage";
-import { CodexDataItem } from "@codex-storage/sdk-js";
+import { CodexDataContent } from "@codex-storage/sdk-js";
 import { FilesUtils } from "../Files/files.utils";
 
 type FileMetadata = {
@@ -19,7 +19,7 @@ type Props = {
   requestId: string;
   purchaseCid: string;
   index: number;
-  data: CodexDataItem[];
+  data: CodexDataContent[];
   onMetadata?: (requestId: string, metadata: FileMetadata) => void;
 };
 

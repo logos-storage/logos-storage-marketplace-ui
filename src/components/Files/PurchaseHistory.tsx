@@ -38,7 +38,7 @@ export function PurchaseHistory({ purchases }: Props) {
   const rows = sorted
     .filter((p) => !!p.request)
     .map((p) => {
-      const duration = p.request!.ask.duration;
+      const duration = parseInt(p.request!.ask.duration, 10);
 
       return (
         <Row

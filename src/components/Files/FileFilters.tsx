@@ -1,4 +1,4 @@
-import { CodexDataItem } from "@codex-storage/sdk-js";
+import { CodexDataContent } from "@codex-storage/sdk-js";
 import { FilesUtils } from "./files.utils";
 import { classnames } from "../../utils/classnames";
 import "./FileFilters.css";
@@ -8,7 +8,7 @@ import ArchiveIcon from "../../assets/icons/archive.svg?react";
 import DocumentIcon from "../../assets/icons/document.svg?react";
 
 type Props = {
-  files: CodexDataItem[];
+  files: CodexDataContent[];
   onFilterToggle: (filter: string) => void;
   selected: string[];
 };

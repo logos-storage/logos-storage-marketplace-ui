@@ -4,7 +4,7 @@ import {
   Sheets,
   WebFileIcon,
 } from "@codex-storage/marketplace-ui-components";
-import { CodexDataItem, CodexPurchase } from "@codex-storage/sdk-js";
+import { CodexDataContent, CodexPurchase } from "@codex-storage/sdk-js";
 import { Bytes } from "../../utils/bytes";
 import { CidCopyButton } from "./CidCopyButton";
 import "./FileDetails.css";
@@ -19,7 +19,7 @@ import { PurchaseHistory } from "./PurchaseHistory";
 import { WebStorage } from "../../utils/web-storage";
 
 type Props = {
-  details: CodexDataItem | null;
+  details: CodexDataContent | null;
   onClose: () => void;
 };
 
