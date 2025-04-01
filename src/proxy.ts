@@ -1,13 +1,10 @@
 import {
   CodexCreateStorageRequestInput,
-  CodexData,
   CodexMarketplace,
   SafeValue,
 } from "@codex-storage/sdk-js";
 import { CodexSdk as Sdk } from "./sdk/codex";
 import { WebStorage } from "./utils/web-storage";
-
-class CodexDataMock extends CodexData {}
 
 class CodexMarketplaceMock extends CodexMarketplace {
   // override async purchases(): Promise<SafeValue<CodexPurchase[]>> {
@@ -137,5 +134,4 @@ class CodexMarketplaceMock extends CodexMarketplace {
 export const CodexSdk = {
   ...Sdk,
   marketplace: () => new CodexMarketplaceMock(CodexSdk.url()),
-  data: () => new CodexDataMock(CodexSdk.url()),
 };
