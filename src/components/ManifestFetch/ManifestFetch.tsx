@@ -11,8 +11,8 @@ export function ManifestFetch() {
 
   const { refetch } = useQuery({
     queryFn: () => {
-      CodexSdk.data()
-        .networkDownload(cid)
+      CodexSdk.client()
+        .data.networkDownload(cid)
         .then((s) => {
           if (s.error === false) {
             setCid("");
@@ -21,8 +21,8 @@ export function ManifestFetch() {
           return Promises.rejectOnError(s);
         });
 
-      return CodexSdk.data()
-        .fetchManifest(cid)
+      return CodexSdk.client()
+        .data.fetchManifest(cid)
         .then((s) => {
           if (s.error === false) {
             setCid("");

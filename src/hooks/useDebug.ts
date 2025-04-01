@@ -6,8 +6,8 @@ export function useDebug(throwOnError: boolean) {
   const { data, isError, isPending, refetch, isSuccess, isFetching } = useQuery(
     {
       queryFn: () =>
-        CodexSdk.debug()
-          .info()
+        CodexSdk.client()
+          .debug.info()
           .then((s) => Promises.rejectOnError(s)),
 
       queryKey: ["debug"],

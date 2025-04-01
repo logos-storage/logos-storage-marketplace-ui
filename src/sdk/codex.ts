@@ -16,6 +16,10 @@ export const CodexSdk = {
     return url;
   },
 
+  client() {
+    return client;
+  },
+
   async load() {
     const [
       u = import.meta.env.VITE_CODEX_API_URL,
@@ -42,7 +46,7 @@ export const CodexSdk = {
     url = u;
 
     const promises = [WebStorage.set("codex-node-url", url)];
-    console.info(url);
+
     if (options.auth) {
       const { username, password } = options.auth;
       basicAuthSecret = btoa(`${username}:${password}`);
@@ -61,21 +65,5 @@ export const CodexSdk = {
     }
 
     return Promise.all(promises);
-  },
-
-  debug() {
-    return client.debug;
-  },
-
-  data() {
-    return client.data;
-  },
-
-  node() {
-    return client.node;
-  },
-
-  marketplace() {
-    return client.marketplace;
   },
 };

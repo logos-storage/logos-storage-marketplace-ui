@@ -26,8 +26,8 @@ type Props = {
 export function FileDetails({ onClose, details }: Props) {
   const { data: purchases = [] } = useQuery({
     queryFn: () =>
-      CodexSdk.marketplace()
-        .purchases()
+      CodexSdk.client()
+        .marketplace.purchases()
         .then(async (res) => {
           if (res.error) {
             return res;

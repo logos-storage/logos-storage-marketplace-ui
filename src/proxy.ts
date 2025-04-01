@@ -33,7 +33,6 @@ class CodexMarketplaceMock extends CodexMarketplace {
   override async createStorageRequest(
     input: CodexCreateStorageRequestInput
   ): Promise<SafeValue<string>> {
-    console.info(input);
     const res = await super.createStorageRequest(input);
 
     if (res.error) {

@@ -16,7 +16,7 @@ export function UploadCard() {
     <main>
       <Upload
         multiple
-        codexData={CodexSdk.data()}
+        codexData={CodexSdk.client().data}
         onSuccess={onSuccess}
         Icon={() => <UploadIcon width={40} color={"#96969666"} />}
       />

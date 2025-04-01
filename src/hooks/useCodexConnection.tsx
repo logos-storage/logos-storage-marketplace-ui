@@ -8,8 +8,8 @@ export function useCodexConnection() {
   const { data, isError, isFetching, refetch } = useQuery({
     queryKey: ["spr"],
     queryFn: async () => {
-      return CodexSdk.node()
-        .spr()
+      return CodexSdk.client()
+        .node.spr()
         .then((data) => Promises.rejectOnError(data, report));
     },
     refetchInterval: 5000,

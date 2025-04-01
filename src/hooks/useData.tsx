@@ -8,8 +8,8 @@ export function useData() {
   const { data = { content: [] } satisfies CodexDataResponse } =
     useQuery<CodexDataResponse>({
       queryFn: () =>
-        CodexSdk.data()
-          .cids()
+        CodexSdk.client()
+          .data.cids()
           .then((res) => Promises.rejectOnError(res)),
       queryKey: ["cids"],
 

@@ -23,8 +23,8 @@ export function PurchasesTable() {
   const content = useData();
   const { data, isPending } = useQuery({
     queryFn: () =>
-      CodexSdk.marketplace()
-        .purchases()
+      CodexSdk.client()
+        .marketplace.purchases()
         .then((s) => Promises.rejectOnError(s)),
     queryKey: ["purchases"],
 

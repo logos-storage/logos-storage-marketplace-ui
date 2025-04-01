@@ -17,8 +17,8 @@ export function LogLevel() {
   const [level, setLevel] = useState<CodexLogLevel>("DEBUG");
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (level: CodexLogLevel) =>
-      CodexSdk.debug()
-        .setLogLevel(level)
+      CodexSdk.client()
+        .debug.setLogLevel(level)
         .then((s) => Promises.rejectOnError(s)),
     onSuccess: () => {
       setToast({

@@ -45,4 +45,8 @@
   .input input {
     --codex-input-background-color: rgba(35, 35, 35, 1);
   }
+
+  .basic-auth-checkbox {
+    margin-bottom: 16px;
+  }
 }

@@ -8,8 +8,8 @@ export function usePersistence(isCodexOnline: boolean) {
   const { data, isError, isFetching, refetch } = useQuery({
     queryKey: [],
     queryFn: async () => {
-      return CodexSdk.marketplace()
-        .activeSlots()
+      return CodexSdk.client()
+        .marketplace.activeSlots()
         .then((data) => Promises.rejectOnError(data, report));
     },
 

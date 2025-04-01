@@ -33,8 +33,8 @@ export function useAvailabilityMutation(
         input: Omit<AvailabilityState, "totalSizeUnit" | "durationUnit">
       ) => Promise<"" | CodexAvailability> = input.id
         ? (input) => {
-            return CodexSdk.marketplace()
-              .updateAvailability({
+            return CodexSdk.client()
+              .marketplace.updateAvailability({
                 totalSize: input.totalSize,
                 duration: input.duration,
                 minPricePerBytePerSecond: input.minPricePerBytePerSecond,
@@ -44,8 +44,8 @@ export function useAvailabilityMutation(
               .then((s) => Promises.rejectOnError(s));
           }
         : (input) =>
-            CodexSdk.marketplace()
-              .createAvailability(input)
+            CodexSdk.client()
+              .marketplace.createAvailability(input)
               .then((s) => Promises.rejectOnError(s));
 
       return fn({

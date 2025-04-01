@@ -18,8 +18,8 @@ export function useStorageRequestMutation(
 
   const { mutateAsync } = useMutation({
     mutationFn: (input: CodexCreateStorageRequestInput) =>
-      CodexSdk.marketplace()
-        .createStorageRequest(input)
+      CodexSdk.client()
+        .marketplace.createStorageRequest(input)
         .then((s) => Promises.rejectOnError(s)),
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["purchases"] });

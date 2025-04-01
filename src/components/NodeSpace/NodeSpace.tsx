@@ -15,8 +15,8 @@ const defaultSpace = {
 export function NodeSpace() {
   const { data: space, isPending } = useQuery({
     queryFn: () =>
-      CodexSdk.data()
-        .space()
+      CodexSdk.client()
+        .data.space()
         .then((s) => Promises.rejectOnError(s)),
     queryKey: ["space"],
     initialData: defaultSpace,
