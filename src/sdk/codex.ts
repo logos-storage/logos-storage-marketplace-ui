@@ -1,8 +1,18 @@
 import { Codex } from "@codex-storage/sdk-js";
 import { WebStorage } from "../utils/web-storage";
 
-let client: Codex = new Codex(import.meta.env.VITE_CODEX_API_URL);
-let url: string = import.meta.env.VITE_CODEX_API_URL;
+let defaultUrl = import.meta.env.VITE_CODEX_API_URL;
+
+if (import.meta.env.VITE_CODEX_SELF_HOSTED === "1") {
+  defaultUrl = window.location.href;
+
+  if (defaultUrl.endsWith("/")) {
+    defaultUrl = defaultUrl.slice(0, -1);
+  }
+}
+
+let client: Codex = new Codex(defaultUrl);
+let url: string = defaultUrl;
 
 export const CodexSdk = {
   url() {
@@ -11,7 +21,7 @@ export const CodexSdk = {
 
   load() {
     return WebStorage.get<string>("codex-node-url").then((u) => {
-      url = u || import.meta.env.VITE_CODEX_API_URL;
+      url = u || defaultUrl;
       client = new Codex(url);
     });
   },
@@ -24,18 +34,18 @@ export const CodexSdk = {
   },
 
   debug() {
-    return client.debug
+    return client.debug;
   },
 
   data() {
-    return client.data
+    return client.data;
   },
 
   node() {
-    return client.node
+    return client.node;
   },
 
   marketplace() {
-    return client.marketplace
+    return client.marketplace;
   },
 };
