@@ -90,11 +90,11 @@ export function AvailabilityReservations({
   }
 
   const totalSize = availability.totalSize;
-  const totalUsed = data.reduce((acc, val) => acc + parseInt(val.size, 10), 0);
+  const totalUsed = data.reduce((acc, val) => acc + val.size, 0);
   const spaceData = [
     ...data.map((val, index) => ({
       title: val.id,
-      size: parseInt(val.size, 10),
+      size: val.size,
       color: AvailabilityUtils.availabilityColors[index],
     })),
     {

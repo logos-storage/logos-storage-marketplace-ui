@@ -102,7 +102,7 @@ export function AvailabilitiesTable({ availabilities, space }: Props) {
           <SlotRow
             key={slot.id}
             active={showDetails}
-            bytes={parseFloat(slot.size)}
+            bytes={slot.size}
             id={slot.id}></SlotRow>
         ))}
       </Fragment>

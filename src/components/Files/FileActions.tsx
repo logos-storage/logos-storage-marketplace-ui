@@ -4,7 +4,6 @@ import {
   Cell,
 } from "@codex-storage/marketplace-ui-components";
 import { FolderButton } from "./FolderButton";
-import { CodexDataContent } from "@codex-storage/sdk-js";
 import { CodexSdk } from "../../sdk/codex";
 import "./FileActions.css";
 import DownloadIcon from "../../assets/icons/download-file.svg?react";
@@ -14,9 +13,10 @@ import { useIsMobile } from "../../hooks/useMobile";
 import { useState } from "react";
 import { attributes } from "../../utils/attributes";
 import CopyIcon from "../../assets/icons/copy.svg?react";
+import { CodexDataItem } from "@codex-storage/sdk-js";
 
 type Props = {
-  content: CodexDataContent;
+  content: CodexDataItem;
   folders: [string, string[]][];
   onFolderToggle: (cid: string, folder: string) => void;
   onDetails: (cid: string) => void;

@@ -4,13 +4,13 @@ import {
   Toast,
   WebFileIcon,
 } from "@codex-storage/marketplace-ui-components";
-import { CodexDataContent } from "@codex-storage/sdk-js";
+import { CodexDataItem } from "@codex-storage/sdk-js";
 import { useState } from "react";
 import "./FileCell.css";
 import CopyIcon from "../../assets/icons/copy.svg?react";
 
 type Props = {
-  content: CodexDataContent;
+  content: CodexDataItem;
 };
 
 export function FileCell({ content }: Props) {

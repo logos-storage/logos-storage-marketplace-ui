@@ -81,7 +81,7 @@ export function Sunburst({ availabilities, space }: Props) {
       },
       children: a.slots.map((slot) => ({
         name: "",
-        value: parseFloat(slot.size),
+        value: slot.size,
         children: [],
         itemStyle: {
           color: AvailabilityUtils.slotColors[index],
@@ -93,12 +93,7 @@ export function Sunburst({ availabilities, space }: Props) {
             color: "#fff",
           },
           formatter: (params: CallbackDataParams) => {
-            return (
-              params.marker +
-              "Slot " +
-              slot.id +
-              Bytes.pretty(parseFloat(slot.size))
-            );
+            return params.marker + "Slot " + slot.id + Bytes.pretty(slot.size);
           },
         },
       })),

@@ -92,7 +92,7 @@ export function PurchasesTable() {
     .map((p, index) => {
       const r = p.request!;
       const ask = r.ask;
-      const duration = parseInt(ask.duration, 10);
+      const duration = ask.duration;
       const pf = ask.proofProbability;
       return (
         <Row
