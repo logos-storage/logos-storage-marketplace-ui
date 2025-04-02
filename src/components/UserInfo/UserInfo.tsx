@@ -10,7 +10,7 @@ import { WebStorage } from "../../utils/web-storage";
 
 type Props = {
   onNameChange?: (value: string) => void;
-  onEnterPressed: () => void;
+  onEnterPressed?: () => void;
 };
 
 export function UserInfo({ onNameChange, onEnterPressed }: Props) {
@@ -37,7 +37,7 @@ export function UserInfo({ onNameChange, onEnterPressed }: Props) {
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      onEnterPressed();
+      onEnterPressed?.();
     }
   };
 
