@@ -36,7 +36,7 @@ export const OnBoardingNameRoute = () => {
             What do you want to be called?
           </h1>
 
-          <UserInfo onNameChange={onNameChange} />
+          <UserInfo onNameChange={onNameChange} onEnterPressed={onNextStep} />
         </section>
 
         <a

@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useState, KeyboardEvent } from "react";
 import { useDebug } from "../../hooks/useDebug";
 import { usePersistence } from "../../hooks/usePersistence";
 import { usePortForwarding } from "../../hooks/usePortForwarding";
@@ -85,6 +85,12 @@ export function HealthChecks({ online, onStepValid }: Props) {
       .then(() => codex.refetch());
   };
 
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onSave();
+    }
+  };
+
   return (
     <div className="health-checks">
       <div
@@ -101,6 +107,7 @@ export function HealthChecks({ online, onStepValid }: Props) {
             isInvalid={isAddressInvalid}
             onChange={onAddressChange}
             value={address}
+            onKeyDown={onKeyDown}
             placeholder="127.0.0.1"></Input>
           {isAddressInvalid ? (
             <ErrorCircleIcon width={16} />
@@ -116,6 +123,7 @@ export function HealthChecks({ online, onStepValid }: Props) {
             type="number"
             onChange={onPortChange}
             value={port}
+            onKeyDown={onKeyDown}
             isInvalid={isPortInvalid}
             placeholder="8080"></Input>
           <SuccessCircleIcon width={20}></SuccessCircleIcon>

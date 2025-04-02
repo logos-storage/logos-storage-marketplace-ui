@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, KeyboardEvent } from "react";
 import "./UserInfo.css";
 import { Input } from "@codex-storage/marketplace-ui-components";
 import EmojiPicker, {
@@ -10,9 +10,10 @@ import { WebStorage } from "../../utils/web-storage";
 
 type Props = {
   onNameChange?: (value: string) => void;
+  onEnterPressed: () => void;
 };
 
-export function UserInfo({ onNameChange }: Props) {
+export function UserInfo({ onNameChange, onEnterPressed }: Props) {
   const [displayName, setDisplayName] = useState(
     WebStorage.onBoarding.getDisplayName()
   );
@@ -32,6 +33,12 @@ export function UserInfo({ onNameChange }: Props) {
     setEmoji(emojiData.emoji);
     WebStorage.onBoarding.setEmoji(emojiData.emoji);
     setAreEmojiVisible(false);
+  };
+
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onEnterPressed();
+    }
   };
 
   return (
@@ -77,6 +84,7 @@ export function UserInfo({ onNameChange }: Props) {
           label="Preferred name"
           id="displayName"
           autoComplete="off"
+          onKeyDown={onKeyDown}
           value={displayName}></Input>
       </div>
     </div>
