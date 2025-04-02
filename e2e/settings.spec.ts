@@ -50,7 +50,7 @@ test("update the URL with basic auth save the credentials", async ({
   await page.goto("/dashboard");
   await page.locator("a").filter({ hasText: "Settings" }).click();
   await page.getByLabel("Address").click();
-  await page.getByLabel("Address").fill("http://localhost:8080");
+  await page.getByLabel("Address").fill("http://127.0.0.1:8080");
   await page.getByLabel("Address").blur();
   await expect(page.getByLabel("Address")).not.toHaveAttribute("aria-invalid");
   await expect(page.locator(".refresh svg")).not.toHaveAttribute(
@@ -91,7 +91,7 @@ test("update the URL with basic auth save the credentials", async ({
 
   await page.locator(".refresh").click();
 
-  await page.waitForRequest("http://localhost:8080/api/codex/v1/spr");
+  await page.waitForRequest("http://127.0.0.1:8080/api/codex/v1/spr");
 
   expect(successRequestAuthorization).toBeNull();
 
