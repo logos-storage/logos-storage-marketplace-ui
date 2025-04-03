@@ -26,11 +26,11 @@ export function HealthChecks({ online, onStepValid }: Props) {
   const portForwarding = usePortForwarding(codex.data);
   const persistence = usePersistence(codex.isSuccess);
   const [isAddressInvalid, setIsAddressInvalid] = useState(false);
-  const [isPortInvalid, setIsPortInvalid] = useState(false);
+  // const [isPortInvalid, setIsPortInvalid] = useState(false);
   const [address, setAddress] = useState(
     HealthCheckUtils.removePort(CodexSdk.url())
   );
-  const [port, setPort] = useState(HealthCheckUtils.getPort(CodexSdk.url()));
+  // const [port, setPort] = useState(HealthCheckUtils.getPort(CodexSdk.url()));
   const queryClient = useQueryClient();
 
   useEffect(
@@ -54,33 +54,31 @@ export function HealthChecks({ online, onStepValid }: Props) {
 
     setAddress(value);
 
-    if (HealthCheckUtils.containsPort(value)) {
-      const address = HealthCheckUtils.removePort(value);
-      setAddress(address);
+    // if (HealthCheckUtils.containsPort(value)) {
+    //   const address = HealthCheckUtils.removePort(value);
+    //   setAddress(address);
 
-      const p = HealthCheckUtils.getPort(value);
-      setPort(p);
-    } else {
-      setAddress(value);
-    }
+    //   const p = HealthCheckUtils.getPort(value);
+    //   setPort(p);
+    // } else {
+    //   setAddress(value);
+    // }
   };
 
-  const onPortChange = (e: React.FormEvent<HTMLInputElement>) => {
-    const element = e.currentTarget;
-    const value = element.value;
+  // const onPortChange = (e: React.FormEvent<HTMLInputElement>) => {
+  //   const element = e.currentTarget;
+  //   const value = element.value;
 
-    setIsPortInvalid(!element.checkValidity());
-    setPort(parseInt(value, 10));
-  };
+  //   setIsPortInvalid(!element.checkValidity());
+  //   setPort(parseInt(value, 10));
+  // };
 
   const onSave = () => {
-    const url = address + ":" + port;
-
-    if (HealthCheckUtils.isUrlInvalid(url)) {
+    if (isAddressInvalid) {
       return;
     }
 
-    CodexSdk.updateURL(url)
+    CodexSdk.updateURL(address)
       .then(() => queryClient.invalidateQueries())
       .then(() => codex.refetch());
   };
@@ -109,26 +107,23 @@ export function HealthChecks({ online, onStepValid }: Props) {
           )}
         </div>
 
-        <div>
-          <Input
-            id="port"
-            label="Port"
-            type="number"
-            onChange={onPortChange}
-            value={port}
-            isInvalid={isPortInvalid}
-            placeholder="8080"></Input>
-          <SuccessCircleIcon width={20}></SuccessCircleIcon>
-        </div>
-
         <div className="refresh">
           <RefreshIcon
-            color={isAddressInvalid || isPortInvalid ? "#494949" : "#6FCB94"}
+            color={isAddressInvalid ? "#494949" : "#6FCB94"}
             onClick={onSave}></RefreshIcon>
         </div>
       </div>
 
       <p>
+        <li>
+          Ensure that your Codex node is running on{" "}
+          <span className="address-hint">
+            {HealthCheckUtils.removePort(address)}
+          </span>{" "}
+          on port{" "}
+          <span className="port-hint">{HealthCheckUtils.getPort(address)}</span>
+          {}
+        </li>
         <li>Ensure that port forwarding is enabled for your settings.</li>
       </p>
 

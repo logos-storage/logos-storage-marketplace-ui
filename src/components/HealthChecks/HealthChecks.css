@@ -14,12 +14,20 @@
     }
 
     > div {
+      &:first-child {
+        flex: 1;
+      }
+
       position: relative;
 
       @media (max-width: 999px) {
         &:not(.refresh) {
           width: 100%;
         }
+      }
+
+      input {
+        width: 100%;
       }
     }
 
@@ -91,6 +99,20 @@
     padding-left: 1.25rem;
     margin-top: 1.75rem;
     margin-bottom: 3rem;
+
+    li {
+      &:first-child {
+        margin-bottom: 8px;
+      }
+
+      .address-hint {
+        color: var(--codex-color-primary);
+      }
+
+      .port-hint {
+        color: #ff8447;
+      }
+    }
   }
 
   ul {
