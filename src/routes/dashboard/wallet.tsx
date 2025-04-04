@@ -21,11 +21,6 @@ import {
   TabProps,
   Tabs,
 } from "@codex-storage/marketplace-ui-components";
-import {
-  CommonFollowers,
-  FollowerTag,
-  ProfileCard,
-} from "ethereum-identity-kit";
 
 export const WalletRoute = () => {
   const tabs: TabProps[] = [
