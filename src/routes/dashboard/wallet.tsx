@@ -1,4 +1,3 @@
-import { ConnectedAccount } from "../../components/ConnectedAccount/ConnectedAccount";
 import { Card } from "../../components/Card/Card";
 import WalletIcon from "../../assets/icons/wallet.svg?react";
 import PlusIcon from "../../assets/icons/plus.svg?react";
@@ -22,6 +21,11 @@ import {
   TabProps,
   Tabs,
 } from "@codex-storage/marketplace-ui-components";
+import {
+  CommonFollowers,
+  FollowerTag,
+  ProfileCard,
+} from "ethereum-identity-kit";
 
 export const WalletRoute = () => {
   const tabs: TabProps[] = [
@@ -47,8 +51,6 @@ export const WalletRoute = () => {
         buttonLabel="Add Wallet"
         buttonIcon={() => <PlusIcon width={20} />}>
         <>
-          <ConnectedAccount></ConnectedAccount>
-
           <div className="buttons">
             <div>
               <ButtonIcon Icon={BuySellIcon} disabled></ButtonIcon>

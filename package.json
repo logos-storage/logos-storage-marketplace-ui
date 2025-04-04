@@ -34,10 +34,13 @@
     "dotted-map": "^2.2.3",
     "echarts": "^5.5.1",
     "emoji-picker-react": "^4.12.0",
+    "ethereum-identity-kit": "^0.2.20",
     "idb-keyval": "^6.2.1",
     "preact": "^10.24.3",
     "react-router": "^6.28.0",
-    "react-router-dom": "^6.28.0"
+    "react-router-dom": "^6.28.0",
+    "viem": "^2.25.0",
+    "wagmi": "^2.14.16"
   },
   "devDependencies": {
     "@playwright/test": "^1.48.0",

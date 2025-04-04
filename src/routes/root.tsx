@@ -5,6 +5,10 @@ import { AppBar } from "../components/AppBar/AppBar";
 import { Backdrop } from "@codex-storage/marketplace-ui-components";
 import { Outlet, ScrollRestoration } from "react-router-dom";
 import { useIsMobile } from "../hooks/useMobile";
+import "ethereum-identity-kit/css";
+import { TransactionProvider } from "ethereum-identity-kit";
+import { WagmiProvider } from "wagmi";
+import { wagmiConfig } from "../config";
 
 export const Root = () => {
   const isMobile = useIsMobile();
@@ -28,7 +32,11 @@ export const Root = () => {
         <AppBar onIconClick={onIconClick} onExpanded={onExpanded} />
         <div>
           <ScrollRestoration></ScrollRestoration>
-          <Outlet />
+          <WagmiProvider config={wagmiConfig}>
+            <TransactionProvider>
+              <Outlet />
+            </TransactionProvider>
+          </WagmiProvider>
         </div>
       </main>
 
