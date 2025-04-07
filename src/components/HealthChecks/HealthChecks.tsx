@@ -99,7 +99,7 @@ export function HealthChecks({ online, onStepValid }: Props) {
   const onSave = () => {
     let url = address;
 
-    if (port) {
+    if (port && port != "80" && port != "443") {
       url += ":" + port;
     }
 
