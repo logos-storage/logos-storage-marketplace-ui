@@ -14,6 +14,10 @@ export const HealthCheckUtils = {
     return parseInt(url.split(":")[2] || defaultPort, 10);
   },
 
+  hasPort(url: string) {
+    return !!url.split(":")[2];
+  },
+
   containsPort(url: string) {
     return url.split(":").length > 2;
   },

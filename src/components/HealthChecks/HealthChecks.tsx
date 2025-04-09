@@ -83,6 +83,8 @@ export function HealthChecks({ online, onStepValid }: Props) {
       .then(() => codex.refetch());
   };
 
+  const hasPort = HealthCheckUtils.hasPort(address);
+
   return (
     <div className="health-checks">
       <div
@@ -116,13 +118,21 @@ export function HealthChecks({ online, onStepValid }: Props) {
 
       <p>
         <li>
-          Ensure that your Codex node is running on{" "}
-          <span className="address-hint">
-            {HealthCheckUtils.removePort(address)}
-          </span>{" "}
-          on port{" "}
-          <span className="port-hint">{HealthCheckUtils.getPort(address)}</span>
-          {}
+          {hasPort ? (
+            <>
+              <span>Port detected is </span>
+              <span className="port-hint">
+                {HealthCheckUtils.getPort(address)}
+              </span>
+            </>
+          ) : (
+            <>
+              <span>Port is not specified, default is </span>
+              <span className="port-hint">
+                {HealthCheckUtils.getPort(address)}
+              </span>
+            </>
+          )}
         </li>
         <li>Ensure that port forwarding is enabled for your settings.</li>
       </p>
