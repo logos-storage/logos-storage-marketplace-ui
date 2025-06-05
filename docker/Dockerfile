@@ -22,7 +22,7 @@ ARG VITE_GEO_IP_URL
 WORKDIR ${BUILD_HOME}
 COPY --chown=${APP_USER}:${APP_USER} . .
 
-RUN npm install
+RUN npm ci
 RUN npm run build
 
 
